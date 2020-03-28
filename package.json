@@ -1,15 +1,19 @@
 {
   "name": "i-said-that-do-not-track-me",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "",
   "scripts": {
-    "start": "web-ext run",
-    "lint": "tslint --project tsconfig.json",
+    "lint:tslint": "tslint --project tsconfig.json",
+    "lint:web-ext": "web-ext lint",
+    "lint": "npm run lint:tslint && npm run lint:web-ext",
     "test": "echo \"Error: no test specified\" && exit 1",
+
     "build": "webpack --mode=development",
     "build-release": "webpack --mode=production",
-    "release": "npm run build-release && npm run pack",
-    "pack": "web-ext build --overwrite-dest -i src test coverage *.json \"*.js\" \"dist/*.map\" -i !manifest.json"
+    "start": "npm run build && web-ext run",
+
+    "pack": "npm run build-release && web-ext build --overwrite-dest -i src test coverage *.json \"*.js\" \"dist/*.map\" -i !manifest.json",
+    "sign": "npm run build-release && web-ext sign -i src test coverage *.json \"*.js\" \"dist/*.map\" -i !manifest.json --channel unlisted"
   },
   "author": "Murat Demir (hisupermurat@gmail.com)",
   "license": "MIT",

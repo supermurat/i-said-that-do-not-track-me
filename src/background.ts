@@ -5,6 +5,7 @@ export let lastTab: Tabs.Tab;
 
 /** open url in incognito mode */
 export const openInIncognitoMode = (url: string, tab?: Tabs.Tab): void => {
+    // ASYNC NOTE: when we make this function async, Browser can't open new incognito tabs, we will fix it later
     console.debug('openInIncognitoMode:started');
     // tslint:disable-next-line: all
     let incognitoWindow: Windows.Window | undefined;
@@ -18,12 +19,15 @@ export const openInIncognitoMode = (url: string, tab?: Tabs.Tab): void => {
         }
     }*/
     if (incognitoWindow) {
+        console.debug('openInIncognitoMode:incognitoWindow:windowId:', incognitoWindow.id);
         // tslint:disable-next-line: all
         browser.tabs.create({url, windowId: incognitoWindow.id});
     } else if (lastTab !== undefined && lastTab.incognito) {
+        console.debug('openInIncognitoMode:lastTab:windowId:', lastTab.windowId);
         // tslint:disable-next-line: all
         browser.tabs.create({url, windowId: lastTab.windowId});
     } else {
+        console.debug('openInIncognitoMode:browser.windows.create:incognito:true');
         // tslint:disable-next-line: all
         browser.windows.create({url, incognito: true});
     }
