@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="options.css"/>
+</head>
+
+<body>
+
+<section class="allowed-sites">
+    <div class="title">Allowed Sites</div>
+    <div class="description">No need to open following sites in incognito mode</div>
+    <div class="detail">One per line in RegEx format</div>
+    <pre class="sample">
+        (mozilla)\.org
+        (firefox|github|google|youtube)\.com
+        (google)\.com.tr
+    </pre>
+    <textarea id="allowedSitesInput" rows="10"></textarea>
+</section>
+
+<section class="forbidden-sites">
+    <div class="title">Forbidden Sites</div>
+    <div class="description">Always open following sites in incognito mode. If there is a match with allowed site list, we will force that matched site to open in incognito mode.</div>
+    <div class="detail">One per line in RegEx format</div>
+    <pre class="sample">
+        news.google.com
+        maps.google.com
+        www.google.com\/maps
+    </pre>
+    <textarea id="forbiddenSitesInput" rows="10"></textarea>
+</section>
+
+<section class="allowed-protocol">
+    <div class="title">Allowed Protocols</div>
+    <div class="description">No need to open following protocols in incognito mode. We will still check for allowed sites. So protocol is not enough to allow it. But if protocol is not in allowed protocols list, we will force to open it in incognito mode.</div>
+    <div class="detail">One per line</div>
+    <pre class="sample">
+        https
+    </pre>
+    <textarea id="allowedProtocolsInput" rows="10"></textarea>
+</section>
+
+<script src="../dist/options.js"></script>
+</body>
+
+</html>

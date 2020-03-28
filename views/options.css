@@ -1,0 +1,54 @@
+
+body {
+    width: 100%;
+    font-family: "Open Sans Light", sans-serif;
+    font-size: 1em;
+    font-weight: 300;
+}
+
+.allowed-sites {
+    border: 1px solid #009900;
+    margin: 20px;
+    padding: 20px;
+}
+
+.forbidden-sites {
+    border: 1px solid #990000;
+    margin: 20px;
+    padding: 20px;
+}
+
+.allowed-protocol {
+    border: 1px solid #009900;
+    margin: 20px;
+    padding: 20px;
+}
+
+.title {
+    font-size: 1.4em;
+    margin-bottom: 0.5em;
+    color: #000000;
+    font-weight: bold;
+}
+
+.description {
+    margin-bottom: 0.5em;
+    color: #000000;
+}
+
+.detail {
+    margin-bottom: 0.5em;
+    color: #444444;
+}
+
+.sample {
+    color: #666666;
+}
+
+label {
+
+}
+
+textarea {
+    width: 100%;
+}

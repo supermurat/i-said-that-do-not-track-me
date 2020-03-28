@@ -5,7 +5,7 @@
   "homepage_url": "https://github.com/supermurat/i-said-that-do-not-track-me",
   "author": "Murat Demir",
   "default_locale": "en",
-  "version": "1.0.5",
+  "version": "1.0.9",
   "applications": {
     "gecko": {
       "id": "i-said-that-do-not-track-me@supermurat.com",
@@ -28,11 +28,16 @@
       "dist/background.js"
     ]
   },
+  "options_ui": {
+    "page": "views/options.html"
+  },
   "permissions": [
     "webRequest",
     "webRequestBlocking",
     "<all_urls>",
     "activeTab",
-    "tabs"
+    "tabs",
+    "storage",
+    "unlimitedStorage"
   ]
 }

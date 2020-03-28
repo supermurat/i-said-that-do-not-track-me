@@ -1,6 +1,6 @@
 {
   "name": "i-said-that-do-not-track-me",
-  "version": "1.0.5",
+  "version": "1.0.9",
   "description": "",
   "scripts": {
     "lint:tslint": "tslint --project tsconfig.json",

@@ -3,6 +3,36 @@ import { browser, Tabs, WebRequest, Windows } from 'webextension-polyfill-ts';
 /** last opened tab, actually it is current tab */
 export let lastTab: Tabs.Tab;
 
+/** Filters Model */
+export class FiltersModel {
+    /** allowed sites list */
+    allowedSites: Array<string> = [];
+    /** forbidden sites list */
+    forbiddenSites: Array<string> = [];
+    /** allowed protocols list */
+    allowedProtocols: Array<string> = [];
+}
+
+/** define default filters */
+export const filters: FiltersModel = {
+    allowedSites: ['(mozilla).org', '(firefox|github)\\.com'],
+    forbiddenSites: [],
+    allowedProtocols: ['https']
+};
+
+/** get user defined filters */
+browser.storage.sync.get()
+    .then(value => {
+        if (value !== undefined && value.filters !== undefined) {
+            filters.allowedSites.push(value.filters.allowedSites.replace(/\r/gui, '').split('\n'));
+            filters.forbiddenSites.push(value.filters.forbiddenSites.replace(/\r/gui, '').split('\n'));
+            filters.allowedProtocols.push(value.filters.allowedProtocols.replace(/\r/gui, '').split('\n'));
+        }
+        console.log('filters', filters);
+    }).catch(reason => {
+        console.error(reason);
+    });
+
 /** open url in incognito mode */
 export const openInIncognitoMode = (url: string, tab?: Tabs.Tab): void => {
     // ASYNC NOTE: when we make this function async, Browser can't open new incognito tabs, we will fix it later
@@ -47,10 +77,7 @@ export const isTabAllowed = (url: string): boolean => {
     if (!url) {
         return false;
     }
-    const forbiddenSites = [
-        'news.google?\\.com'
-    ];
-    for (const forbiddenSite of forbiddenSites) {
+    for (const forbiddenSite of filters.forbiddenSites) {
         if (new RegExp(
             `^http(s)?:\\/\\/(www\\.)?([-a-zA-Z0-9@:%_+.~#?&/=]*)${
                 forbiddenSite
@@ -62,17 +89,19 @@ export const isTabAllowed = (url: string): boolean => {
             return false;
         }
     }
-    const allowedSites = [
-        '(mozilla)\\.org',
-        '(firefox|github|google|youtube)\\.com',
-        '(google)\\.com.tr'
-    ];
     let isAllowed = false;
-    if (!url.startsWith('http') && !url.startsWith('ftp')) {
-        console.log('Allowed Protocol:', url);
-        isAllowed = true;
+    for (const allowedProtocol of filters.allowedProtocols) {
+        if (url.startsWith(allowedProtocol)) {
+            console.log('Allowed Protocol:', allowedProtocol, url);
+            isAllowed = true;
+            break;
+        }
+    }
+    if (!isAllowed) {
+        console.log('Disallowed Protocol:', url);
     } else {
-        for (const allowedSite of allowedSites) {
+        isAllowed = false;
+        for (const allowedSite of filters.allowedSites) {
             if (new RegExp(
                 `^http(s)?:\\/\\/(www\\.)?([-a-zA-Z0-9@:%_+.~#?&/=]*)${
                     allowedSite

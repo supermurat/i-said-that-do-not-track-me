@@ -1,21 +1,11 @@
+import { browser } from 'webextension-polyfill-ts';
 
-/** test */
-const leftPadForm = document.getElementById('leftpad-form');
-/** test */
-const padBG = document.getElementById('pad-bg');
+/** open options button */
+const openOptions: HTMLTextAreaElement | null = document.querySelector('#openOptions');
 
-if (leftPadForm && padBG) {
-    leftPadForm.addEventListener(
-        'submit',
-        e => {
-            e.preventDefault();
-
-            console.log('padding');
-            // resultNode.value = textNode.value;
-        },
-        false);
-
-    padBG.addEventListener('click', e => {
-        console.log('click');
+if (openOptions) {
+    openOptions.addEventListener('click', e => {
+        // tslint:disable-next-line: all
+        browser.runtime.openOptionsPage();
     });
 }
