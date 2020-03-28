@@ -1,0 +1,14 @@
+{
+  "extensionName": {
+    "message": "I Said That Do Not Track Me",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "",
+    "description": "Description of the extension."
+  },
+  "actionTitle": {
+    "message": "Do Not Track Me",
+    "description": "Action button title"
+  }
+}

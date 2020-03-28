@@ -1,0 +1,47 @@
+{
+  "name": "i-said-that-do-not-track-me",
+  "version": "1.0.2",
+  "description": "",
+  "scripts": {
+    "start": "web-ext run",
+    "lint": "tslint --project tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=development",
+    "build-release": "webpack --mode=production",
+    "release": "npm run build-release && npm run pack",
+    "pack": "web-ext build --overwrite-dest -i src test coverage *.json \"*.js\" \"dist/*.map\" -i !manifest.json"
+  },
+  "author": "Murat Demir (hisupermurat@gmail.com)",
+  "license": "MIT",
+  "repository": "https://github.com/supermurat/i-said-that-do-not-track-me",
+  "dependencies": {
+    "webextension-polyfill-ts": "^0.14.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "~8.3.5",
+    "@commitlint/config-conventional": "~8.3.4",
+    "@types/node": "~13.1.8",
+    "husky": "~4.0.10",
+    "tslint": "5.20.1",
+    "ts-node": "^8.6.2",
+    "typescript": "3.5.3",
+    "awesome-typescript-loader": "^5.2.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "source-map-loader": "^0.2.4",
+    "source-map-support": "^0.5.16",
+    "web-ext": "^4.0.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "echo 'Pre-commit: running lint...' && npm run lint"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}

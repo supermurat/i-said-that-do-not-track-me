@@ -1,11 +1,32 @@
 {
   "manifest_version": 2,
-  "name": "i-said-that-do-not-track-me",
-  "version": "1.0",
-  "description": "",
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
   "homepage_url": "https://github.com/supermurat/i-said-that-do-not-track-me",
+  "author": "Murat Demir",
+  "default_locale": "en",
+  "version": "1.0.2",
+  "applications": {
+    "gecko": {
+      "id": "i-said-that-do-not-track-me@supermurat.com",
+      "strict_min_version": "57.0"
+    }
+  },
   "icons": {
     "48": "icon.svg"
+  },
+  "browser_action": {
+    "default_icon": {
+      "48": "icon.svg"
+    },
+    "default_title": "__MSG_actionTitle__",
+    "default_popup": "views/popup.html",
+    "browser_style": true
+  },
+  "background": {
+    "scripts": [
+      "dist/background.js"
+    ]
   },
   "permissions": [
     "webRequest",
@@ -13,16 +34,5 @@
     "<all_urls>",
     "activeTab",
     "tabs"
-  ],
-  "background": {
-    "scripts": ["background.js"]
-  },
-
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "i-said-that-do-not-track-me@supermurat.com",
-      "strict_min_version": "57.0a1"
-    }
-  }
-
+  ]
 }
