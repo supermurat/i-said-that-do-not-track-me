@@ -1,14 +1,14 @@
 {
   "extensionName": {
-    "message": "I Said That Do Not Track Me",
+    "message": "Sana Beni Takip Etme Dedim!",
     "description": "Name of the extension."
   },
   "extensionDescription": {
-    "message": "",
+    "message": "*İzin verilmemiş tüm siteleri gizli gezinti penceresinde aç. *URL'lerden UTM girdilerini kaldır.",
     "description": "Description of the extension."
   },
   "actionTitle": {
-    "message": "Do Not Track Me",
+    "message": "Beni Takip Etme",
     "description": "Action button title"
   }
 }

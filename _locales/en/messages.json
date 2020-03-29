@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "I Said That Do Not Track Me",
+    "message": "I Said That Do Not Track Me!",
     "description": "Name of the extension."
   },
   "extensionDescription": {
-    "message": "",
+    "message": "*Open all of untrusted sites in new incognito window. *Remove UTM tokens from URL.",
     "description": "Description of the extension."
   },
   "actionTitle": {

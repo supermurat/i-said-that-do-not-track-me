@@ -1,37 +1,52 @@
 import { browser, Tabs, WebRequest, Windows } from 'webextension-polyfill-ts';
 
+import { FilterSettingModel, FiltersModel } from './models';
+
 /** last opened tab, actually it is current tab */
 export let lastTab: Tabs.Tab;
 
-/** Filters Model */
-export class FiltersModel {
-    /** allowed sites list */
-    allowedSites: Array<string> = [];
-    /** forbidden sites list */
-    forbiddenSites: Array<string> = [];
-    /** allowed protocols list */
-    allowedProtocols: Array<string> = [];
-}
-
 /** define default filters */
-export const filters: FiltersModel = {
-    allowedSites: ['(mozilla).org', '(firefox|github)\\.com'],
-    forbiddenSites: [],
-    allowedProtocols: ['https']
+export const defaultFilters: FilterSettingModel = {
+    allowedSites: '(mozilla).org\r\n(firefox|github)\\.com',
+    forbiddenSites: '',
+    allowedProtocols: 'https'
 };
 
-/** get user defined filters */
-browser.storage.sync.get()
-    .then(value => {
-        if (value !== undefined && value.filters !== undefined) {
-            filters.allowedSites.push(value.filters.allowedSites.replace(/\r/gui, '').split('\n'));
-            filters.forbiddenSites.push(value.filters.forbiddenSites.replace(/\r/gui, '').split('\n'));
-            filters.allowedProtocols.push(value.filters.allowedProtocols.replace(/\r/gui, '').split('\n'));
-        }
-        console.log('filters', filters);
-    }).catch(reason => {
-        console.error(reason);
-    });
+/** define filters */
+export const filters: FiltersModel = {
+    allowedSites: [],
+    forbiddenSites: [],
+    allowedProtocols: []
+};
+
+/** set filter */
+export const setFilter = (filterList: Array<string>, newFilters: string): void => {
+    if (newFilters !== undefined && newFilters.replace(/\r/gui, '').replace(/\n/gui, '') !== '') {
+        filterList.push(...newFilters.replace(/\r/gui, '').split('\n'));
+    }
+};
+
+/** reset filters */
+export const resetFilters = (): void => {
+    filters.allowedSites = [];
+    filters.forbiddenSites = [];
+    filters.allowedProtocols = [];
+    setFilter(filters.allowedSites, defaultFilters.allowedSites);
+    setFilter(filters.forbiddenSites, defaultFilters.forbiddenSites);
+    setFilter(filters.allowedProtocols, defaultFilters.allowedProtocols);
+};
+
+/** populate filters */
+export const populateFilters = (filterSetting: FilterSettingModel): void => {
+    resetFilters();
+    console.log('populateFilters:filterSetting', filterSetting);
+    if (filterSetting !== undefined) {
+        setFilter(filters.allowedSites, filterSetting.allowedSites);
+        setFilter(filters.forbiddenSites, filterSetting.forbiddenSites);
+        setFilter(filters.allowedProtocols, filterSetting.allowedProtocols);
+    }
+    console.log('populateFilters:filters', filters);
+};
 
 /** open url in incognito mode */
 export const openInIncognitoMode = (url: string, tab?: Tabs.Tab): void => {
@@ -153,4 +168,26 @@ browser.webRequest.onBeforeRequest.addListener(
 
 browser.tabs.onCreated.addListener(tab => {
     lastTab = tab;
+});
+
+resetFilters();
+
+/** get user defined filters */
+browser.storage.sync.get()
+    .then(value => {
+        console.log('browser.storage.sync.get', value);
+        if (value !== undefined) {
+            populateFilters(value.filters);
+        }
+    }).catch(reason => {
+    console.error(reason);
+});
+
+browser.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === 'sync') {
+        console.log('browser.storage.onChanged', changes);
+        if (changes.filters !== undefined) {
+            populateFilters(changes.filters.newValue);
+        }
+    }
 });

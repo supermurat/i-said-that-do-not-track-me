@@ -1,7 +1,7 @@
 {
   "name": "i-said-that-do-not-track-me",
-  "version": "1.0.9",
-  "description": "",
+  "version": "1.1.0",
+  "description": "*Open all of untrusted sites in new incognito window. *Remove UTM tokens from URL.",
   "scripts": {
     "lint:tslint": "tslint --project tsconfig.json",
     "lint:web-ext": "web-ext lint",
