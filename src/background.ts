@@ -48,45 +48,6 @@ export const populateFilters = (filterSetting: FilterSettingModel): void => {
     console.log('populateFilters:filters', filters);
 };
 
-/** open url in incognito mode */
-export const openInIncognitoMode = (url: string, tab?: Tabs.Tab): void => {
-    // ASYNC NOTE: when we make this function async, Browser can't open new incognito tabs, we will fix it later
-    console.debug('openInIncognitoMode:started');
-    // tslint:disable-next-line: all
-    let incognitoWindow: Windows.Window | undefined;
-    /*const allWindows = await browser.windows.getAll();
-    if (allWindows !== undefined) {
-        for (const window of allWindows) {
-            if (window.incognito && window.type === 'normal') {
-                incognitoWindow = window;
-                break;
-            }
-        }
-    }*/
-    if (incognitoWindow) {
-        console.debug('openInIncognitoMode:incognitoWindow:windowId:', incognitoWindow.id);
-        // tslint:disable-next-line: all
-        browser.tabs.create({url, windowId: incognitoWindow.id});
-    } else if (lastTab !== undefined && lastTab.incognito) {
-        console.debug('openInIncognitoMode:lastTab:windowId:', lastTab.windowId);
-        // tslint:disable-next-line: all
-        browser.tabs.create({url, windowId: lastTab.windowId});
-    } else {
-        console.debug('openInIncognitoMode:browser.windows.create:incognito:true');
-        // tslint:disable-next-line: all
-        browser.windows.create({url, incognito: true});
-    }
-    if (tab !== undefined && tab.id !== undefined) {
-        // tslint:disable-next-line: all
-        browser.tabs.remove(tab.id);
-        // browser.tabs.create({'url': 'about:blank'});
-    } else if (lastTab !== undefined && lastTab.id !== undefined) {
-        // tslint:disable-next-line: all
-        browser.tabs.remove(lastTab.id);
-    }
-    console.debug('openInIncognitoMode:done');
-};
-
 /** check if is url allowed to open in normal window */
 export const isTabAllowed = (url: string): boolean => {
     if (!url) {
@@ -136,12 +97,56 @@ export const isTabAllowed = (url: string): boolean => {
     return isAllowed;
 };
 
+/** open url in incognito mode */
+export const openInIncognitoMode = async (url: string, tab?: Tabs.Tab): Promise<void> => {
+    // ASYNC NOTE: when we make this function async, Browser can't open new incognito tabs, we will fix it later
+    console.debug('openInIncognitoMode:started');
+    // tslint:disable-next-line: all
+    let incognitoWindow: Windows.Window | undefined;
+    const allWindows = await browser.windows.getAll();
+    if (allWindows !== undefined) {
+        for (const window of allWindows) {
+            if (window.incognito && window.type === 'normal') {
+                incognitoWindow = window;
+                break;
+            }
+        }
+    }
+    if (incognitoWindow) {
+        console.debug('openInIncognitoMode:incognitoWindow:windowId:', incognitoWindow.id);
+        // tslint:disable-next-line: all
+        browser.tabs.create({url, windowId: incognitoWindow.id});
+    } else if (tab !== undefined && tab.incognito) {
+        console.debug('openInIncognitoMode:lastTab:windowId:', tab.windowId);
+        // tslint:disable-next-line: all
+        browser.tabs.create({url, windowId: tab.windowId});
+    } else {
+        console.debug('openInIncognitoMode:browser.windows.create:incognito:true');
+        // tslint:disable-next-line: all
+        browser.windows.create({url, incognito: true});
+    }
+    if (tab !== undefined) {
+        console.debug('openInIncognitoMode:tab', tab);
+        if (tab.id !== undefined) {
+            // tslint:disable-next-line: all
+            browser.tabs.remove(tab.id);
+        }
+    }
+    console.debug('openInIncognitoMode:done:url', url);
+};
+
 /** check url and fix it, also open it in incognito mode if it is not allowed */
 export const checkAndFix = (requestDetails: WebRequest.OnBeforeRequestDetailsType): WebRequest.BlockingResponse => {
-    console.debug('checkAndFix:started');
+    console.debug('checkAndFix:started', requestDetails);
     const url = requestDetails.url;
-    if (!lastTab.incognito && !isTabAllowed(url)) {
-        openInIncognitoMode(url);
+    if (!requestDetails.incognito && !lastTab.incognito && !isTabAllowed(url)) {
+        openInIncognitoMode(url, lastTab)
+            .then(r => {
+                // ignore me, I have already done what I have to do.
+            })
+            .catch(reason => {
+                console.error(reason);
+            });
 
         return {cancel: true};
     }
@@ -155,7 +160,7 @@ export const checkAndFix = (requestDetails: WebRequest.OnBeforeRequestDetailsTyp
             return {redirectUrl: fixedURL};
         }
     }
-    console.debug('checkAndFix:done');
+    console.debug('checkAndFix:done:url', url);
 
     return {};
 };

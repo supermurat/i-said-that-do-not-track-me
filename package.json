@@ -1,19 +1,17 @@
 {
   "name": "i-said-that-do-not-track-me",
-  "version": "1.1.0",
+  "version": "1.2.6",
   "description": "*Open all of untrusted sites in new incognito window. *Remove UTM tokens from URL.",
   "scripts": {
     "lint:tslint": "tslint --project tsconfig.json",
     "lint:web-ext": "web-ext lint",
     "lint": "npm run lint:tslint && npm run lint:web-ext",
     "test": "echo \"Error: no test specified\" && exit 1",
-
     "build": "webpack --mode=development",
     "build-release": "webpack --mode=production",
     "start": "npm run build && web-ext run",
-
     "pack": "npm run build-release && web-ext build --overwrite-dest -i src test coverage *.json \"*.js\" \"dist/*.map\" -i !manifest.json",
-    "sign": "npm run build-release && web-ext sign -i src test coverage *.json \"*.js\" \"dist/*.map\" -i !manifest.json --channel unlisted"
+    "sign": "npm run build-release && web-ext sign -i src test coverage *.json \"*.js\" \"dist/*.map\" -i !manifest.json --channel unlisted --api-key user:13442115:563 --api-secret 672e0cd839e305757ca3f0c340c265fa8405f329cce77fef8459f59806fbf817"
   },
   "author": "Murat Demir (hisupermurat@gmail.com)",
   "license": "MIT",
