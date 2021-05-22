@@ -1,6 +1,6 @@
 {
   "name": "i-said-that-do-not-track-me",
-  "version": "1.2.6",
+  "version": "2.0.3",
   "description": "*Open all of untrusted sites in new incognito window. *Remove UTM tokens from URL.",
   "scripts": {
     "lint:tslint": "tslint --project tsconfig.json",
@@ -17,23 +17,23 @@
   "license": "MIT",
   "repository": "https://github.com/supermurat/i-said-that-do-not-track-me",
   "dependencies": {
-    "webextension-polyfill-ts": "^0.14.0"
+    "webextension-polyfill-ts": "^0.25.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "~8.3.5",
-    "@commitlint/config-conventional": "~8.3.4",
-    "@types/node": "~13.1.8",
-    "husky": "~4.0.10",
+    "@commitlint/cli": "~12.1.4",
+    "@commitlint/config-conventional": "~12.1.4",
+    "@types/node": "~15.6.0",
+    "husky": "~6.0.0",
     "tslint": "5.20.1",
-    "ts-node": "^8.6.2",
-    "typescript": "3.5.3",
+    "ts-node": "^9.1.1",
+    "typescript": "4.2.4",
     "awesome-typescript-loader": "^5.2.1",
     "clean-webpack-plugin": "^3.0.0",
-    "source-map-loader": "^0.2.4",
-    "source-map-support": "^0.5.16",
-    "web-ext": "^4.0.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "source-map-loader": "^3.0.0",
+    "source-map-support": "^0.5.19",
+    "web-ext": "^6.1.0",
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.7.0"
   },
   "husky": {
     "hooks": {

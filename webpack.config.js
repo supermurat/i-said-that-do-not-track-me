@@ -21,9 +21,7 @@ module.exports = {
             "webextension-polyfill-ts": path.resolve(path.join(__dirname, "node_modules", "webextension-polyfill-ts"))
         },
     },
-    node: {
-        fs: "empty"
-    },
+    node: {},
     module: {
         rules: [
             // All files with a ".ts" or ".tsx" extension will be handled by "awesome-typescript-loader".

@@ -1,4 +1,4 @@
-import { browser, Tabs, WebRequest, Windows } from 'webextension-polyfill-ts';
+import { browser, Storage, Tabs, WebRequest, Windows } from 'webextension-polyfill-ts';
 
 import { FilterSettingModel, FiltersModel } from './models';
 
@@ -112,11 +112,11 @@ export const openInIncognitoMode = async (url: string, tab?: Tabs.Tab): Promise<
             }
         }
     }
-    if (incognitoWindow) {
+    if (incognitoWindow && incognitoWindow.id) {
         console.debug('openInIncognitoMode:incognitoWindow:windowId:', incognitoWindow.id);
         // tslint:disable-next-line: all
         browser.tabs.create({url, windowId: incognitoWindow.id});
-    } else if (tab !== undefined && tab.incognito) {
+    } else if (tab !== undefined && tab.incognito && tab.windowId) {
         console.debug('openInIncognitoMode:lastTab:windowId:', tab.windowId);
         // tslint:disable-next-line: all
         browser.tabs.create({url, windowId: tab.windowId});
@@ -171,7 +171,7 @@ browser.webRequest.onBeforeRequest.addListener(
     ['blocking']
 );
 
-browser.tabs.onCreated.addListener(tab => {
+browser.tabs.onCreated.addListener((tab: Tabs.Tab) => {
     lastTab = tab;
 });
 
@@ -179,16 +179,17 @@ resetFilters();
 
 /** get user defined filters */
 browser.storage.sync.get()
-    .then(value => {
+    .then((value: {[p: string]: any }) => {
         console.log('browser.storage.sync.get', value);
         if (value !== undefined) {
             populateFilters(value.filters);
         }
-    }).catch(reason => {
-    console.error(reason);
-});
+    })
+    .catch((reason: any) => {
+        console.error(reason);
+    });
 
-browser.storage.onChanged.addListener((changes, areaName) => {
+browser.storage.onChanged.addListener((changes: {[p: string]: Storage.StorageChange }, areaName: string) => {
     if (areaName === 'sync') {
         console.log('browser.storage.onChanged', changes);
         if (changes.filters !== undefined) {
